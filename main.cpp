@@ -1,45 +1,37 @@
 #include <iostream>
-#include <string>
-
-int main() {
-    
-}
-
-#include <iostream>
 #include <fstream>
 #include <vector>
 #include <memory>
 #include <sstream>
 #include <iomanip>
-#include <string>
 
-// Header first
+// Workaround as requested: Include implementation directly
 #include "Shape.h"
-
-// WORKAROUND: Including .cpp directly. 
-// Note: If you do this, DO NOT list Shape.cpp in your compile command.
 #include "Shape.cpp"
 
+// Stage 4: Function to display areas polymorphically
 void printAllAreas(const std::vector<std::unique_ptr<Shape>>& shapes) {
     for (const auto& shape : shapes) {
-        shape->display();
-        std::cout << "\nArea: " << std::fixed << std::setprecision(4) << shape->getArea() << "\n" << std::endl;
+        shape->display(); // Calls derived version
+        std::cout << "\nArea: " << std::fixed << std::setprecision(4) 
+                  << shape->getArea() << "\n" << std::endl;
     }
 }
 
 int main() {
+    // Stage 3: File Handling
     std::ifstream file("shapes.txt");
     if (!file) {
-        std::cerr << "Error: Could not open shapes.txt. Make sure the file exists in the root folder." << std::endl;
+        std::cerr << "Error: shapes.txt not found." << std::endl;
         return 1;
     }
 
     std::vector<std::unique_ptr<Shape>> shapes;
     std::string line;
-    int lineNumber = 0;
+    int lineNum = 0;
 
     while (std::getline(file, line)) {
-        lineNumber++;
+        lineNum++;
         if (line.empty()) continue;
 
         std::stringstream ss(line);
@@ -51,7 +43,7 @@ int main() {
             if (ss >> w >> h) {
                 shapes.push_back(std::make_unique<Rectangle>(w, h));
             } else {
-                std::cerr << "Line " << lineNumber << ": Invalid rectangle data." << std::endl;
+                std::cerr << "Line " << lineNum << ": Invalid data for rectangle." << std::endl;
             }
         } 
         else if (type == "circle") {
@@ -59,28 +51,16 @@ int main() {
             if (ss >> r) {
                 shapes.push_back(std::make_unique<Circle>(r));
             } else {
-                std::cerr << "Line " << lineNumber << ": Invalid circle data." << std::endl;
+                std::cerr << "Line " << lineNum << ": Invalid data for circle." << std::endl;
             }
         } 
         else {
-            std::cerr << "Line " << lineNumber << ": Unknown shape type '" << type << "'" << std::endl;
+            std::cerr << "Line " << lineNum << ": Unknown shape type '" << type << "'" << std::endl;
         }
     }
 
     file.close();
-    
-    if (shapes.empty()) {
-        std::cout << "No valid shapes were loaded from the file." << std::endl;
-    } else {
-        printAllAreas(shapes);
-    }
+    printAllAreas(shapes);
 
     return 0;
 }
-#include "Shape.h"
-
-void Shape::display() const {
-    std::cout << "Generic Shape";
-}
-g++ -std=c++17 main.cpp -o program
-./program
