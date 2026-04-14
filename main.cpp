@@ -64,3 +64,20 @@ int main() {
 
     return 0;
 }
+#include "Shape.h"
+
+void Shape::display() const {
+    std::cout << "Basic Shape type";
+}
+
+void Rectangle::display() const {
+    std::cout << "Rectangle (" << width << " x " << height << ")";
+}
+
+void Circle::display() const {
+    std::cout << "Circle (radius: " << radius << ")";
+}
+rectangle 10 4
+circle 3
+rectangle 2 8
+circle 5
