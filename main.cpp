@@ -77,3 +77,5 @@ int main() {
 
     return 0;
 }
+g++ -std=c++17 main.cpp -o program
+./program
