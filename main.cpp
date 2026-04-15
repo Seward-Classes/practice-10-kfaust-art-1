@@ -4,25 +4,32 @@
 #include <memory>
 #include <sstream>
 #include <iomanip>
+#include <string>
 
-// Workaround as requested: Include implementation directly
+// 1. Include the Header
 #include "Shape.h"
+
+// 2. The "Workaround": Only include the .cpp if you are 
+// NOT compiling it separately in the terminal.
 #include "Shape.cpp"
 
-// Stage 4: Function to display areas polymorphically
 void printAllAreas(const std::vector<std::unique_ptr<Shape>>& shapes) {
+    if (shapes.empty()) {
+        std::cout << "No shapes found to display." << std::endl;
+        return;
+    }
     for (const auto& shape : shapes) {
-        shape->display(); // Calls derived version
+        shape->display();
         std::cout << "\nArea: " << std::fixed << std::setprecision(4) 
                   << shape->getArea() << "\n" << std::endl;
     }
 }
 
 int main() {
-    // Stage 3: File Handling
+    // 3. Ensure this filename is exactly lowercase in the sidebar
     std::ifstream file("shapes.txt");
     if (!file) {
-        std::cerr << "Error: shapes.txt not found." << std::endl;
+        std::cerr << "Error: shapes.txt not found in " << std::string(getenv("PWD")) << std::endl;
         return 1;
     }
 
@@ -32,7 +39,7 @@ int main() {
 
     while (std::getline(file, line)) {
         lineNum++;
-        if (line.empty()) continue;
+        if (line.empty() || line.find_first_not_of(" \t\n\v\f\r") == std::string::npos) continue;
 
         std::stringstream ss(line);
         std::string type;
@@ -43,7 +50,7 @@ int main() {
             if (ss >> w >> h) {
                 shapes.push_back(std::make_unique<Rectangle>(w, h));
             } else {
-                std::cerr << "Line " << lineNum << ": Invalid data for rectangle." << std::endl;
+                std::cerr << "Line " << lineNum << ": Invalid data." << std::endl;
             }
         } 
         else if (type == "circle") {
@@ -51,12 +58,9 @@ int main() {
             if (ss >> r) {
                 shapes.push_back(std::make_unique<Circle>(r));
             } else {
-                std::cerr << "Line " << lineNum << ": Invalid data for circle." << std::endl;
+                std::cerr << "Line " << lineNum << ": Invalid data." << std::endl;
             }
         } 
-        else {
-            std::cerr << "Line " << lineNum << ": Unknown shape type '" << type << "'" << std::endl;
-        }
     }
 
     file.close();
