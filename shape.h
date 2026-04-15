@@ -1,32 +1,34 @@
 #pragma once
-#include <iostream>
-#include <string>
+#define _USE_MATH_DEFINES // Essential for M_PI on some systems
 #include <cmath>
+#include <iostream>
 
-// Stage 1: Abstract Base Class
 class Shape {
 public:
-    virtual ~Shape() = default; // Essential for proper cleanup of derived types
-    virtual double getArea() const = 0; // Pure virtual: Makes class abstract
+    virtual ~Shape() = default;
+    virtual double getArea() const = 0;
     virtual void display() const; 
 };
 
-// Stage 2: Rectangle Derived Class
 class Rectangle : public Shape {
-private:
     double width, height;
 public:
     Rectangle(double w, double h) : width(w), height(h) {}
     double getArea() const override { return width * height; }
-    void display() const override;
+    void display() const override {
+        std::cout << "Rectangle (" << width << " x " << height << ")";
+    }
 };
 
-// Stage 2: Circle Derived Class
 class Circle : public Shape {
-private:
     double radius;
 public:
     Circle(double r) : radius(r) {}
-    double getArea() const override { return M_PI * radius * radius; }
-    void display() const override;
+    double getArea() const override { 
+        // Use a literal if M_PI fails, or just 3.14159265358979323846
+        return M_PI * radius * radius; 
+    }
+    void display() const override {
+        std::cout << "Circle (radius: " << radius << ")";
+    }
 };
