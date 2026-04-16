@@ -1,8 +1,3 @@
-/*
-AI Disclosure: This code was developed with the assistance of an AI (Gemini) 
-to implement polymorphism using modern C++ smart pointers and file parsing.
-*/
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
