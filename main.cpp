@@ -6,7 +6,7 @@
 #include "Shape.h"
 
 // Temporary workaround:
-#include "Shape.cpp"
+#include "shape.cpp"
 
 void printAllAreas(const std::vector<std::unique_ptr<Shape>>& shapes) {
     for (const auto& shape : shapes) {
