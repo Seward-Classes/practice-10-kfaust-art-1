@@ -1,13 +1,15 @@
-#pragma once
-#define _USE_MATH_DEFINES // Essential for M_PI on some systems
-#include <cmath>
+#ifndef SHAPE_H
+#define SHAPE_H
+
 #include <iostream>
+#include <string>
+#include <cmath>
 
 class Shape {
 public:
-    virtual ~Shape() = default;
-    virtual double getArea() const = 0;
-    virtual void display() const; 
+    virtual ~Shape() = default; // Essential for smart pointers and inheritance
+    virtual double getArea() const = 0; // Pure virtual
+    virtual void display() const = 0;
 };
 
 class Rectangle : public Shape {
@@ -16,7 +18,7 @@ public:
     Rectangle(double w, double h) : width(w), height(h) {}
     double getArea() const override { return width * height; }
     void display() const override {
-        std::cout << "Rectangle (" << width << " x " << height << ")";
+        std::cout << "Rectangle (" << width << " x " << height << ")" << std::endl;
     }
 };
 
@@ -24,11 +26,10 @@ class Circle : public Shape {
     double radius;
 public:
     Circle(double r) : radius(r) {}
-    double getArea() const override { 
-        // Use a literal if M_PI fails, or just 3.14159265358979323846
-        return M_PI * radius * radius; 
-    }
+    double getArea() const override { return M_PI * radius * radius; }
     void display() const override {
-        std::cout << "Circle (radius: " << radius << ")";
+        std::cout << "Circle (radius: " << radius << ")" << std::endl;
     }
 };
+
+#endif
